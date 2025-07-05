@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Stopwatch</title>
+<style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+  }
+  .stopwatch {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 1em;
+    margin: 5px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+  <h2>Stopwatch</h2>
+  <div class="stopwatch">
+    <span id="minutes">00</span>:<span id="seconds">00</span>:<span id="milliseconds">000</span>
+  </div>
+  <div>
+    <button id="startStopButton">Start</button>
+    <button id="resetButton">Reset</button>
+  </div>
+
+  <script>
+    let timerInterval;
+    let minutes = 0;
+    let seconds = 0;
+    let milliseconds = 0;
+    let isRunning = false;
+
+    const minutesLabel = document.getElementById('minutes');
+    const secondsLabel = document.getElementById('seconds');
+    const millisecondsLabel = document.getElementById('milliseconds');
+    const startStopButton = document.getElementById('startStopButton');
+    const resetButton = document.getElementById('resetButton');
+
+    function startTimer() {
+      timerInterval = setInterval(updateTimer, 10);
+      startStopButton.textContent = 'Stop';
+      isRunning = true;
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      startStopButton.textContent = 'Start';
+      isRunning = false;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      minutes = 0;
+      seconds = 0;
+      milliseconds = 0;
+      updateDisplay();
+      startStopButton.textContent = 'Start';
+      isRunning = false;
+    }
+
+    function updateTimer() {
+      milliseconds += 10;
+      if (milliseconds >= 1000) {
+        milliseconds = 0;
+        seconds++;
+        if (seconds >= 60) {
+          seconds = 0;
+          minutes++;
+        }
+      }
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      minutesLabel.textContent = String(minutes).padStart(2, '0');
+      secondsLabel.textContent = String(seconds).padStart(2, '0');
+      millisecondsLabel.textContent = String(milliseconds).padStart(3, '0');
+    }
+
+    startStopButton.addEventListener('click', () => {
+      if (isRunning) {
+        stopTimer();
+      } else {
+        startTimer();
+      }
+    });
+
+    resetButton.addEventListener('click', resetTimer);
+  </script>
+
+</body>
+</html>
